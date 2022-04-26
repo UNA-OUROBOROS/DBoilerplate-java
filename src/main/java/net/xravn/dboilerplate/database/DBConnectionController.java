@@ -3,6 +3,7 @@ package net.xravn.dboilerplate.database;
 import java.sql.Connection;
 
 import net.xravn.dboilerplate.configuration.ConfigurationManager;
+import net.xravn.dboilerplate.database.connection.DBConnection;
 
 public class DBConnectionController {
     private DBConnectionController() {

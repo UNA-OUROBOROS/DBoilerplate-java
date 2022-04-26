@@ -1,4 +1,4 @@
-package net.xravn.dboilerplate.database;
+package net.xravn.dboilerplate.database.connection;
 
 import java.sql.Connection;
 

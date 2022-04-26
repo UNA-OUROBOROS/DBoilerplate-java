@@ -1,8 +1,8 @@
-package net.xravn.dboilerplate.sqlite.database;
+package net.xravn.dboilerplate.sqlite.connection;
 
 import java.sql.Connection;
 
-import net.xravn.dboilerplate.database.GenericDBConnection;
+import net.xravn.dboilerplate.database.connection.GenericDBConnection;
 
 public class SQLiteConnection extends GenericDBConnection {
 
