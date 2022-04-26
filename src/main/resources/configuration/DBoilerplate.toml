@@ -1,4 +1,5 @@
 [database]
+    # example SQLite connection
     schema = "DBoilerplate"
     host = "localhost"
     port = 3306
@@ -8,10 +9,12 @@
 [unit-tests]
     ommit_db_tests = true
     [unit-tests.database]
-        schema = "DBoilerplateTest"
         # in memory database for SQLite
-        host = ":memory:"
-        port = 3306
+        schema = ":memory:"
+        # in SQLite there is no host and port
+        host = ""
+        port = 0
+        # also there is no user and password
         [unit-tests.database.credentials]
             user = ""
             password = ""
