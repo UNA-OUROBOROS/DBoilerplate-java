@@ -81,7 +81,7 @@ public class ConfigurationController {
     }
 
     public String getTestDatabaseSchema() {
-        return toml.getString("database.schema");
+        return toml.getString("unit-tests.database.schema");
     }
 
     public String getTestDatabaseUser() {
