@@ -1,0 +1,16 @@
+[database]
+    schema = "DBerbose"
+    host = "localhost"
+    port = 3306
+    [database.credentials]
+        user = "admin"
+        password = "admin"
+[unit-tests]
+    ommit_db_tests = true
+    [unit-tests.database]
+        schema = "DBerboseTest"
+        host = "localhost"
+        port = 3306
+        [unit-tests.database.credentials]
+            user = "admin"
+            password = "admin"
