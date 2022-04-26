@@ -1,5 +1,5 @@
 [database]
-    schema = "DBerbose"
+    schema = "DBoilerplate"
     host = "localhost"
     port = 3306
     [database.credentials]
@@ -8,7 +8,7 @@
 [unit-tests]
     ommit_db_tests = true
     [unit-tests.database]
-        schema = "DBerboseTest"
+        schema = "DBoilerplateTest"
         host = "localhost"
         port = 3306
         [unit-tests.database.credentials]

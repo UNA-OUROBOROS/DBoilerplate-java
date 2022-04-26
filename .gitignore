@@ -6,5 +6,5 @@ target/
 # vscode
 .vscode/
 
-# DBerbose config
-/DBerbose.toml
+# DBoilerplate config
+/DBoilerplate.toml

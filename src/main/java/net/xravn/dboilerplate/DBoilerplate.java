@@ -1,7 +1,7 @@
-package net.xravn.dberbose;
+package net.xravn.dboilerplate;
 
 
-public class DBerbose {
+public class DBoilerplate {
 
     public static void main(String[] args) {
         System.out.println("Hello World!");
