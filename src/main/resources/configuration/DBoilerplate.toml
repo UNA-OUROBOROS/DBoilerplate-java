@@ -1,11 +1,12 @@
 [database]
-    # example SQLite connection
+    # example MySQL/MariaDB connection
     schema = "DBoilerplate"
     host = "localhost"
     port = 3306
+    # default MySQL/MariaDB credentials
     [database.credentials]
-        user = "admin"
-        password = "admin"
+        user = "root"
+        password = ""
 [unit-tests]
     ommit_db_tests = true
     [unit-tests.database]
