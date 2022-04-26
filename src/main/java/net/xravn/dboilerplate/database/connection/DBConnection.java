@@ -6,9 +6,4 @@ public interface DBConnection {
     public void setCredentials(String database, String user, String password);
 
     public Connection getConnection() throws Exception;
-
-    public void closeConnection();
-
-    public boolean isConnected();
-
 }

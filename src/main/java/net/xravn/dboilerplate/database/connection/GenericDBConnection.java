@@ -23,47 +23,14 @@ public abstract class GenericDBConnection implements DBConnection {
 
     @Override
     public Connection getConnection() {
-        synchronized (lock) {
-            if (!isConnected()) {
-                try {
-                    connection = java.sql.DriverManager.getConnection(connectionString);
-                } catch (Exception e) {
-                    System.err.println("Could not connect to database: " + e.getMessage());
-                    return null;
-                }
-            }
-            return connection;
+        try {
+            return java.sql.DriverManager.getConnection(connectionString);
+        } catch (Exception e) {
+            System.err.println("Could not connect to database: " + e.getMessage());
         }
+        return null;
     }
 
-    @Override
-    public boolean isConnected() {
-        synchronized (lock) {
-            try {
-                return connection == null ? false : !connection.isClosed();
-            } catch (Exception e) {
-                return false;
-            }
-        }
-    }
-
-    @Override
-    public void closeConnection() {
-        synchronized (lock) {
-            if (connection != null) {
-                try {
-                    connection.close();
-                } catch (Exception ex) {
-                    System.err.printf("Could not close SQLite connection: %s\n",
-                            ex.getLocalizedMessage());
-                }
-                connection = null;
-            }
-        }
-    }
-
-    private Connection connection = null;
     private String connectionString = null;
-    private final Object lock = new Object();
 
 }
