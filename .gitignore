@@ -8,3 +8,6 @@ target/
 
 # DBoilerplate config
 /DBoilerplate.toml
+
+# DBoilerplate jar
+DBoilerplate-java.jar
