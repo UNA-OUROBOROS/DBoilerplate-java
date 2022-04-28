@@ -6,6 +6,7 @@ import picocli.CommandLine;
 import picocli.CommandLine.Command;
 
 @Command(name = "dboilerplate", mixinStandardHelpOptions = true, version = "0.0.1", //
+        subcommands = { TestDatabaseConnection.class, CommandLine.HelpCommand.class }, //
         description = "DBoilerplate is a tool to reduce (D)atabase (B)oilerplate code.")
 public class DBoilerplateCLI implements Callable<Void> {
 

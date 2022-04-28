@@ -1,6 +1,8 @@
 package net.xravn.dboilerplate.controller;
 
 import java.io.File;
+import java.util.HashMap;
+import java.util.Map;
 
 import com.moandjiezana.toml.Toml;
 
@@ -48,52 +50,73 @@ public class ConfigurationController {
         }
     }
 
-    public Integer getWebServerPort() {
-        return toml.getLong("web_server.port").intValue();
-    }
-
-    public String getDatabaseHost() {
-        return toml.getString("database.host");
-    }
-
-    public Integer getDatabasePort() {
-        return toml.getLong("database.port").intValue();
-    }
-
-    public String getDatabaseSchema() {
-        return toml.getString("database.schema");
-    }
-
-    public String getDatabaseUser() {
-        return toml.getString("database.credentials.user");
-    }
-
-    public String getDatabasePassword() {
-        return toml.getString("database.credentials.password");
-    }
-
-    public String getTestDatabaseHost() {
-        return toml.getString("database.host");
-    }
-
-    public Integer getTestDatabasePort() {
-        return toml.getLong("database.port").intValue();
-    }
-
-    public String getTestDatabaseSchema() {
-        return toml.getString("unit-tests.database.schema");
-    }
-
-    public String getTestDatabaseUser() {
-        return toml.getString("unit-tests.database.credentials.user");
-    }
-
-    public String getTestDatabasePassword() {
-        return toml.getString("unit-tests.database.credentials.password");
-    }
-
     public Boolean ommitDBTests() {
         return toml.getBoolean("unit-tests.ommit_db_tests");
+    }
+
+    public String getJDBCDriver() {
+        return toml.getString("database.java.jdbc_driver");
+    }
+
+    public String getTestJDBCDriver() {
+        return toml.getString("unit-tests.database.java.jdbc_driver");
+    }
+
+    public String getJDBCConnectionString() {
+        return toml.getString("database.java.connection_string");
+    }
+
+    public String getTestJDBCConnectionString() {
+        return toml.getString("unit-tests.database.java.connection_string");
+    }
+
+    public Map<String, Object> getDatabaseParameters() {
+        return getFormatedMap(toml.getTable("database.parameters").toMap());
+    }
+
+    public Map<String, Object> getTestDatabaseParameters() {
+        return getFormatedMap(toml.getTable("unit-tests.database.parameters").toMap());
+    }
+
+    /**
+     * returns the formated map of a given templated toml with enviroment variables
+     * example:
+     * [database.parameters]
+     * dbname = "${dbname}"
+     * dbuser = "${dbuser}"
+     * dbpass = "${dbpass}"
+     * returns:
+     * [database.parameters]
+     * dbname = "dbname"
+     * dbuser = "dbuser"
+     * dbpass = "dbpass"
+     * 
+     * @param toml toml to generate the map from
+     * @return the parsed map
+     */
+    private Map<String, Object> getFormatedMap(Map<String, Object> toml) {
+        Map<String, Object> formatedMap = new HashMap<>();
+        // iterate over the map recursively
+        for (Map.Entry<String, Object> entry : toml.entrySet()) {
+            if (entry.getValue() instanceof Map) {
+                formatedMap.put(entry.getKey(), getFormatedMap((Map<String, Object>) entry.getValue()));
+            } else if (entry.getValue() instanceof String) {
+                // if the input is a string check if begins with ${
+                // and ends with }
+                if (((String) entry.getValue()).startsWith("${") && ((String) entry.getValue()).endsWith("}")) {
+                    // if so, get the enviroment variable
+                    String envVar = ((String) entry.getValue()).substring(2, ((String) entry.getValue()).length() - 1);
+                    // and replace it with the enviroment variable value
+                    formatedMap.put(entry.getKey(), System.getenv(envVar));
+                } else {
+                    // if not, just add the string
+                    formatedMap.put(entry.getKey(), entry.getValue());
+                }
+            } else {
+                formatedMap.put(entry.getKey(), entry.getValue());
+            }
+        }
+        return formatedMap;
     }
 
     private Toml toml;

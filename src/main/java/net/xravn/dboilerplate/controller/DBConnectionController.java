@@ -1,6 +1,7 @@
 package net.xravn.dboilerplate.controller;
 
 import java.sql.Connection;
+import java.util.Map;
 
 import net.xravn.dboilerplate.database.connection.DBConnection;
 
@@ -22,19 +23,13 @@ public class DBConnectionController {
         }
         try {
             ConfigurationController config = ConfigurationController.getInstance();
-            String database;
-            String user;
-            String password;
+            Map<String, Object> connectionParams;
             if (!testMode) {
-                database = config.getDatabaseSchema();
-                user = config.getDatabaseUser();
-                password = config.getDatabasePassword();
+                connectionParams = config.getDatabaseParameters();
             } else {
-                database = config.getTestDatabaseSchema();
-                user = config.getTestDatabaseUser();
-                password = config.getTestDatabasePassword();
+                connectionParams = config.getTestDatabaseParameters();
             }
-            dbConnection.setCredentials(database, user, password);
+            dbConnection.setParameters(connectionParams);
             return dbConnection.getConnection();
         } catch (Exception ex) {
             System.err.println("Error creating database connection: " + ex);

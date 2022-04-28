@@ -1,21 +1,25 @@
+# example MySQL/MariaDB connection
 [database]
-    # example MySQL/MariaDB connection
-    schema = "DBoilerplate"
-    host = "localhost"
-    port = 3306
-    # default MySQL/MariaDB credentials
-    [database.credentials]
-        user = "root"
+    [database.java]
+        jdbc_driver = "com.mysql.jdbc.Driver"
+        connection_string = "jdbc:mysql://{user}:{password}@{host}:{port}/{schema}"
+    [database.paramenters]
+        schema = "DBoilerplate"
+        host = "localhost"
+        port = 3306
+        # default MySQL/MariaDB credentials
+        username = "root" 
         password = ""
+        # we can use an env variable if we do not want to expose the credentials
+        # username = "${MYSQL_USER}"
+        # password = "${MYSQL_PASSWORD}"
 [unit-tests]
     ommit_db_tests = true
+    # example for SQLite connection
     [unit-tests.database]
-        # in memory database for SQLite
-        schema = ":memory:"
-        # in SQLite there is no host and port
-        host = ""
-        port = 0
-        # also there is no user and password
-        [unit-tests.database.credentials]
-            user = ""
-            password = ""
+        [unit-tests.database.java]
+            jdbc_driver = "org.sqlite.JDBC"
+            connection_string = "jdbc:sqlite:{file}"
+        [unit-tests.database.parameters]
+            # in memory database for SQLite
+            file = ":memory:"

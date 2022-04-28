@@ -7,7 +7,7 @@ import org.junit.jupiter.api.Test;
 
 import net.xravn.dboilerplate.controller.ConfigurationController;
 import net.xravn.dboilerplate.controller.DBConnectionController;
-import net.xravn.dboilerplate.sqlite.connection.SQLiteConnection;
+import net.xravn.dboilerplate.database.connection.GenericJDBConnection;
 
 public class DatabaseConnectionTest {
 
@@ -15,8 +15,11 @@ public class DatabaseConnectionTest {
     public static void setUp() throws ClassNotFoundException {
         DBConnectionController dbConnectionController = DBConnectionController.getInstance();
         dbConnectionController.setTestMode(true);
-        dbConnectionController.setDBConnection(new SQLiteConnection());
-
+        String driver = ConfigurationController.getInstance().getTestJDBCDriver();
+        String connectionString = ConfigurationController.getInstance().getTestJDBCConnectionString();
+        GenericJDBConnection dbConnection = new GenericJDBConnection(driver, connectionString) {
+        };
+        dbConnectionController.setDBConnection(dbConnection);
     }
 
     @Test
