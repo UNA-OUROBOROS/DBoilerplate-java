@@ -94,12 +94,15 @@ public class ConfigurationController {
      * @param toml toml to generate the map from
      * @return the parsed map
      */
+    @SuppressWarnings("unchecked")
     private Map<String, Object> getFormatedMap(Map<String, Object> toml) {
         Map<String, Object> formatedMap = new HashMap<>();
         // iterate over the map recursively
         for (Map.Entry<String, Object> entry : toml.entrySet()) {
             if (entry.getValue() instanceof Map) {
-                formatedMap.put(entry.getKey(), getFormatedMap((Map<String, Object>) entry.getValue()));
+                // do a checked cast to Map<String, Object>
+                Map<String, Object> subMap = (Map<String, Object>) entry.getValue();
+                formatedMap.put(entry.getKey(), getFormatedMap(subMap));
             } else if (entry.getValue() instanceof String) {
                 // if the input is a string check if begins with ${
                 // and ends with }
