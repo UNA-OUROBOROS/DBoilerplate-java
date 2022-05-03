@@ -1,18 +1,43 @@
 package net.xravn.dboilerplate.database.connection;
 
 import java.sql.Connection;
+import java.sql.Driver;
+import java.sql.DriverManager;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Properties;
+
+import net.xravn.dboilerplate.database.runtime.DriverLoader;
 
 public class GenericJDBConnection implements DBConnection {
+    
 
     public GenericJDBConnection(String driver) throws ClassNotFoundException {
-        Class.forName(driver);
+        this(driver, "");
     }
 
     public GenericJDBConnection(String driver, String connectionString) throws ClassNotFoundException {
-        this(driver);
+        this(driver, connectionString, null, false);
+    }
+
+    public GenericJDBConnection(String driver, String connectionString, String driverPath, boolean isPath)
+            throws ClassNotFoundException {
         this.connectionString = connectionString;
+        if (driverPath != null) {
+            // load the driver at runtime
+            try {
+                Class<?> driverClass = DriverLoader.load(driver, driverPath, isPath);
+                Driver driverInstance = (Driver) driverClass.getDeclaredConstructor().newInstance();
+                DriverManager.registerDriver(driverInstance);
+                System.out.println("Driver loaded: " + driverClass.getName());
+                this.driver = driverInstance;
+            } catch (Exception e) {
+                throw new RuntimeException("Failed to load driver: " + driver, e);
+            }
+        } else {
+            Class.forName(driver);
+        }
+
     }
 
     public String getConnectionString() {
@@ -62,7 +87,7 @@ public class GenericJDBConnection implements DBConnection {
                 Object value = parameters.get(key);
                 // if not found return IllegalArgumentException
                 if (value == null) {
-                    throw new IllegalArgumentException("Invalid connection string: " + connectionString);
+                    throw new IllegalArgumentException("Invalid connection string[parameter {"+ key + "} not found]: " + connectionString);
                 }
                 // append the value
                 sb.append(value);
@@ -88,14 +113,23 @@ public class GenericJDBConnection implements DBConnection {
     @Override
     public Connection getConnection() {
         try {
-            return java.sql.DriverManager.getConnection(getFormatedConnectionString());
+            if(driver == null){
+                return DriverManager.getConnection(getFormatedConnectionString(), "", "");
+            }
+            else{
+                return driver.connect(getFormatedConnectionString(), new Properties());
+            }
         } catch (Exception e) {
             System.err.println("Could not connect to database: " + e.getMessage());
+            if (e.getCause() != null) {
+                System.err.println("Cause: " + e.getCause().getMessage());
+            }
         }
         return null;
     }
 
     private String connectionString = null;
     private Map<String, Object> parameters = new HashMap<>();
+    private Driver driver;
 
 }

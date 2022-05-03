@@ -28,8 +28,25 @@ public class TestDatabaseConnection implements Callable<Integer> {
 			dbConnectionController.setTestMode(false);
 			String driver = configurationController.getJDBCDriver();
 			String connectionString = configurationController.getJDBCConnectionString();
+			GenericJDBConnection dbConnection;
+			String driverFile = configurationController.getJDBCDriverFile();
+			String driverPath = configurationController.getJDBCDriverPath();
 			try {
-				GenericJDBConnection dbConnection = new GenericJDBConnection(driver, connectionString);
+				if (driverFile != null) {
+					dbConnection = new GenericJDBConnection(
+							driver,
+							connectionString,
+							driverFile,
+							false);
+				} else if (driverPath != null) {
+					dbConnection = new GenericJDBConnection(
+							driver,
+							connectionString,
+							driverPath,
+							true);
+				} else {
+					dbConnection = new GenericJDBConnection(driver, connectionString);
+				}
 				dbConnectionController.setDBConnection(dbConnection);
 				if (dbConnectionController.isConnected()) {
 					System.out.println("Database connection successful");
@@ -47,8 +64,25 @@ public class TestDatabaseConnection implements Callable<Integer> {
 			dbConnectionController.setTestMode(true);
 			String driver = configurationController.getTestJDBCDriver();
 			String connectionString = configurationController.getTestJDBCConnectionString();
+			GenericJDBConnection dbConnection;
+			String driverFile = configurationController.getTestJDBCDriverFile();
+			String driverPath = configurationController.getTestJDBCDriverPath();
 			try {
-				GenericJDBConnection dbConnection = new GenericJDBConnection(driver, connectionString);
+				if (driverFile != null) {
+					dbConnection = new GenericJDBConnection(
+							driver,
+							connectionString,
+							driverFile,
+							false);
+				} else if (driverPath != null) {
+					dbConnection = new GenericJDBConnection(
+							driver,
+							connectionString,
+							driverPath,
+							true);
+				} else {
+					dbConnection = new GenericJDBConnection(driver, connectionString);
+				}
 				dbConnectionController.setDBConnection(dbConnection);
 				if (dbConnectionController.isConnected()) {
 					System.out.println("Unit-test database connection successful");

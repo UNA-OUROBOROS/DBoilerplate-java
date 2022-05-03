@@ -70,6 +70,22 @@ public class ConfigurationController {
         return toml.getString("unit-tests.database.java.connection_string");
     }
 
+    public String getJDBCDriverFile() {
+        return toml.getString("database.java.driver_file");
+    }
+
+    public String getTestJDBCDriverFile() {
+        return toml.getString("unit-tests.database.java.driver_file");
+    }
+
+    public String getJDBCDriverPath() {
+        return toml.getString("database.java.driver_path");
+    }
+
+    public String getTestJDBCDriverPath() {
+        return toml.getString("unit-tests.database.java.driver_path");
+    }
+
     public Map<String, Object> getDatabaseParameters() {
         return getFormatedMap(toml.getTable("database.parameters").toMap());
     }

@@ -14,10 +14,29 @@ public class DatabaseConnectionTest {
     @BeforeAll
     public static void setUp() throws ClassNotFoundException {
         DBConnectionController dbConnectionController = DBConnectionController.getInstance();
+        ConfigurationController configurationController = ConfigurationController.getInstance();
         dbConnectionController.setTestMode(true);
-        String driver = ConfigurationController.getInstance().getTestJDBCDriver();
-        String connectionString = ConfigurationController.getInstance().getTestJDBCConnectionString();
-        GenericJDBConnection dbConnection = new GenericJDBConnection(driver, connectionString);
+        String driver = configurationController.getTestJDBCDriver();
+        String connectionString = configurationController.getTestJDBCConnectionString();
+        GenericJDBConnection dbConnection;
+        String driverFile = configurationController.getTestJDBCDriverFile();
+        String driverPath = configurationController.getTestJDBCDriverPath();
+        if (driverFile != null) {
+            dbConnection = new GenericJDBConnection(
+                driver,
+                connectionString,
+                driverFile,
+                false);
+        } else if (driverPath != null) {
+            dbConnection = new GenericJDBConnection(
+                driver,
+                connectionString,
+                driverPath,
+                true);
+        }
+        else{
+            dbConnection = new GenericJDBConnection(driver, connectionString);
+        }
         dbConnectionController.setDBConnection(dbConnection);
     }
 

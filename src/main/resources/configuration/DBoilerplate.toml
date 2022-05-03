@@ -1,14 +1,17 @@
 # example MySQL/MariaDB connection
 [database]
     [database.java]
-        jdbc_driver = "com.mysql.jdbc.Driver"
-        connection_string = "jdbc:mysql://{user}:{password}@{host}:{port}/{schema}"
-    [database.paramenters]
+        # example driver load at runtime
+        driver_file = "drivers/mariadb-java-client-3.0.4.jar"
+        #driver_path = "drivers/"
+        jdbc_driver = "org.mariadb.jdbc.Driver"
+        connection_string = "jdbc:mariadb://{host}:{port}/{schema}?user={user}&password={password}"
+    [database.parameters]
         schema = "DBoilerplate"
         host = "localhost"
         port = 3306
         # default MySQL/MariaDB credentials
-        username = "root" 
+        user = "root" 
         password = ""
         # we can use an env variable if we do not want to expose the credentials
         # username = "${MYSQL_USER}"
@@ -18,6 +21,8 @@
     # example for SQLite connection
     [unit-tests.database]
         [unit-tests.database.java]
+            #driver_file = "drivers/sqlite-jdbc-3.36.0.3.jar"
+            driver_path = "drivers/"
             jdbc_driver = "org.sqlite.JDBC"
             connection_string = "jdbc:sqlite:{file}"
         [unit-tests.database.parameters]
