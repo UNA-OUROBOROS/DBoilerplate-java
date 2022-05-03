@@ -17,8 +17,7 @@ public class DatabaseConnectionTest {
         dbConnectionController.setTestMode(true);
         String driver = ConfigurationController.getInstance().getTestJDBCDriver();
         String connectionString = ConfigurationController.getInstance().getTestJDBCConnectionString();
-        GenericJDBConnection dbConnection = new GenericJDBConnection(driver, connectionString) {
-        };
+        GenericJDBConnection dbConnection = new GenericJDBConnection(driver, connectionString);
         dbConnectionController.setDBConnection(dbConnection);
     }
 

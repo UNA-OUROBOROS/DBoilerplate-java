@@ -4,7 +4,7 @@ import java.sql.Connection;
 import java.util.HashMap;
 import java.util.Map;
 
-public abstract class GenericJDBConnection implements DBConnection {
+public class GenericJDBConnection implements DBConnection {
 
     public GenericJDBConnection(String driver) throws ClassNotFoundException {
         Class.forName(driver);
